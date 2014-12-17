@@ -123,6 +123,8 @@ deleteSelected = function(){
 	for(var i = oscArray.length - 1; i >=0; i--){
     
         if (oscArray[i].select){
+        	var now = context.currentTime;
+        	oscArray[i].oscillator.stop(now);
             oscArray.splice(i,1);
         }
     }
@@ -239,6 +241,10 @@ newOsc = function(){
 	osc.initializeDefaultEffects(num, num);
 	oscArray.push(osc);
 
+	if (oscArray.length == 1){
+		SelectFirstOsc();
+	}
+
 	//update screen spinner value
 	$("#s" + num ).find(" .spinner ").val(num);
 
@@ -252,7 +258,9 @@ delSelected = function(){
 	console.log("delete " + $(".ui-selected").parent().attr("id"));	      
 	$(".ui-selected").parent().remove();	
 
-	SelectFirstOsc();
+	if (oscArray.length >= 1){
+		SelectFirstOsc();
+	}
 }
 
 SelectFirstOsc = function(){
@@ -526,17 +534,20 @@ initializeToggles = function(){
         		console.log("midi toggle");
         		midiLoopState = (++midiLoopState == midiLoopOptions.length) ? 0: midiLoopState;
 				$('#midiBehavior').html(midiLoopOptions[midiLoopState]);
+				
+				var now = context.currentTime;
+				gainNode.gain.cancelScheduledValues(now);
+				gainNode.gain.setValueAtTime($("#gainKnob").val()/9 + 1, now);
+				gainKnobValue = $("#gainKnob").val()/9 + 1;
+			
 				if (midiLoopState == 0){ //loop off
 					MIDILOOPTRIGGER = false;
 					gainKnobUpdate = true;
-					gainNode.gain.value = $("#gainKnob").cv/9 + 1;
-					console.log("off");
 				} else if (midiLoopState == 1){ //loop on
 					MIDILOOPTRIGGER = true;
 				}else if (midiLoopState == 2){ //mod on
 					MIDILOOPTRIGGER = false;
 					gainKnobUpdate = false;
-					gainKnobValue = gainNode.gain.value;
 				}
 
         		break;
@@ -675,13 +686,14 @@ function modWheel(value){
 		$("audio").each(function (e) {
 			if ($(this).attr('id')!= "you"){
 				$(this).prop("volume",value/127.0);
-				var idSlider = $(this).siblings(".sliderBoxRouting").children("input").attr("id");
-				$("#" + idSlider).value(value/127.0);
+				$(this).parent().find('input').val(value/127.0).change();
 			}
 		});
 		//change volume output from the node to match
-		gainNode.gain = (value/127.0) * gainKnobValue;
-		
+		var now = context.currentTime;
+		gainNode.gain.cancelScheduledValues(now);
+		gainNode.gain.setValueAtTime(value/127.0 * gainKnobValue, now);
+					
 	}
 }
 

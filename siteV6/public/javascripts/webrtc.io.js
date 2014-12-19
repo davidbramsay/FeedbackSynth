@@ -95,6 +95,8 @@ if (navigator.webkitGetUserMedia) {
 
   // Array of known peer socket ids
   rtc.connections = [];
+  //added userName variable.
+  rtc.userNames = [];
   // Stream-related variables.
   rtc.streams = [];
   rtc.numStreams = 0;
@@ -150,7 +152,8 @@ if (navigator.webkitGetUserMedia) {
       rtc._socket.send(JSON.stringify({
         "eventName": "join_room",
         "data": {
-          "room": room
+          "room": room,
+          "name": userName
         }
       }));
 
@@ -244,7 +247,8 @@ if (navigator.webkitGetUserMedia) {
           "data": {
             "label": event.candidate.sdpMLineIndex,
             "candidate": event.candidate.candidate,
-            "socketId": id
+            "socketId": id,
+            "name": userName
           }
         }));
       }
@@ -297,7 +301,8 @@ if (navigator.webkitGetUserMedia) {
         "eventName": "send_offer",
         "data": {
           "socketId": socketId,
-          "sdp": session_description
+          "sdp": session_description,
+          "name": userName
         }
       }));
     }, null, sdpConstraints);
@@ -317,7 +322,8 @@ if (navigator.webkitGetUserMedia) {
         "eventName": "send_answer",
         "data": {
           "socketId": socketId,
-          "sdp": session_description
+          "sdp": session_description,
+          "name": userName
         }
       }));
       //TODO Unused variable!?
@@ -367,17 +373,6 @@ if (navigator.webkitGetUserMedia) {
 
 
          var inputStream = context.createMediaStreamSource(stream);
-      
-         for (track in stream.getAudioTracks()){
-          console.log('GOT TRACK' + track);
-
-         }
-         //mix down stereo to mono if applicable
-         var splitter = context.createChannelSplitter(8);
-         var merger = context.createChannelMerger(8);
-         inputStream.connect(splitter);
-         splitter.connect(merger);
-         
 
         for (var i=0; i <9; i++){
           var temp=context.createBiquadFilter();
@@ -389,12 +384,11 @@ if (navigator.webkitGetUserMedia) {
         
         }
 
-        
         gainNode = context.createGain ? context.createGain() : context.createGainNode();
         gainNode.gain.value = 1;
 
-        //inputStream.connect(gainNode);
-        merger.connect(gainNode);
+        inputStream.connect(gainNode);
+      
         gainNode.connect(eqObject[0]);
 
         for (var i=1; i<9; i++){
@@ -524,9 +518,9 @@ if (navigator.webkitGetUserMedia) {
     };
 
     channel.onmessage = function(message) {
-      console.log('data stream message ' + id);
+      console.log('data stream message ' + id + " " + userName);
       console.log(message);
-      rtc.fire('data stream data', channel, message.data);
+      rtc.fire('data stream data', channel, message.data, id);
     };
 
     channel.onerror = function(err) {

@@ -1,7 +1,7 @@
 {
-  "name": "MultiWebRTC",
-  "description": "Example of multi user webrtc",
-  "version": "0.0.2-1",
+  "name": "Feedback Synthesizer",
+  "description": "multi-user webrtc feedback instrument",
+  "version": "0.0.1",
   "engines": {
     "node": ">= 0.6.0"
   },
@@ -15,19 +15,6 @@
   "scripts": {
     "start": "example/server.js"
   },
-  "author": "Ben Brittain",
-  "contributors": [
-    {
-      "name": "Ben Brittain",
-      "email": "ben@brittain.org"
-    },
-    {
-      "name": "Dennis Mårtensson",
-      "email": "me@dennis.is"
-    },
-    {
-      "name": "David Peter",
-      "email": "david.a.peter@gmail.com"
-    }
+  "author": "David Ramsay"
   ]
 }

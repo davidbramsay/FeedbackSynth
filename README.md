@@ -1,48 +1,26 @@
-#webrtc.io-demo
+# GroupLoop: a collaborative, network-enabled audio feedback instrument
 ==============
 
-You can have a look at the [demo](http://webrtc.dennis.is/)
+GroupLoop is a browser-based, collaborative audio feedback control system for musical performance.  It was published in NIME 2015 ([paper](https://davidbramsay.com/public/RamsayNIME.pdf)), and is live on the web [here](https://feedback.davidbramsay.com).
 
-##Instructions on how to setup the demo:
+[Click here](https://davidbramsay.com/grouploop) for a short introduction to the concept and a video description/live performance.  
 
-Run in your terminal
 
-```bash 
-git clone git@github.com:webRTC/webrtc.io-demo.git
-```
+##Set it up yourself locally.
 
-```bash 
-cd webrtc.io-demo
-```
+terminal:
 
 ```bash 
+git clone https://github.com/dramsay9/FeedbackSynth.git
+cd FeedbackSynth
 npm install
-```
-
-```bash 
-cd site
-```
-
-```bash 
 node server.js
 ```
 
-In a version of Chrome that have webRTC support.
+In a version of Chrome that has webRTC support:
 
 go to [localhost:8080](http://localhost:8080)
 
-click allow to see your camera
+click allow when asked about accessing the microphone.
 
-go to [localhost:8080](http://localhost:8080)
-
-click allow to see your camera and the connection will be made between your two open windows.
-
-
-##For instructions on how to start developing with webRTC.io
-
-go to [https://github.com/webRTC/webRTC.io](https://github.com/webRTC/webRTC.io) and read the instructions.
-
-Developed by:
-    [@dennismatensson](https://github.com/dennismartensson)
-    [@cavedweller](https://github.com/cavedweller)
-    [@sarenji](https://github.com/sarenji)
+I used some sample code and got to know webRTC from [webRTC.io](https://github.com/webRTC/webRTC.io), thanks to those guys.
